@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 07</title>
+
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #732C02;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        main {
+            margin: 50px auto;
+            background-color: white;
+            box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.3);
+            width: 450px;
+            padding: 20px;
+            border-radius: 3px;
+        }
+
+        main h1 {
+            margin-bottom: 20px;
+        }
+
+        main p {
+            margin-block: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+
+        }
+
+        form input:focus {
+            border-color: #F2C849;
+            outline: none;
+        }
+
+        form label {
+            margin-bottom: 5px;
+        }
+
+        form .button {
+            padding: 10px 20px;
+            background-color: #BF8339;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            width: 150px;
+            margin: 20px auto;
+        }
+
+        .button:hover {
+            background-color: #A6775B;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+
+        <h1>Exercicio 07</h1>
+
+        <form class="form">
+
+            <label for="numero">Digite um número:</label>
+            <input type="number" id="numero" name="numero" placeholder="Digite um número">
+
+            <button type="submit" class="button">Finalizar</button>
+        </form>
+
+        <div class="resultados">
+
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('.form');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const inputNumero = document.querySelector('#numero');
+
+                const resultados = document.querySelector('.resultados');
+
+                let numero = Number(inputNumero.value);
+
+                resultados.innerHTML = '';
+
+                if (numero && numero >= 0.00 && numero <= 10.00) {
+
+                    if (numero >= 7) {
+                        const p = document.createElement('p');
+                        p.innerHTML = `Sua nota foi ${Number(numero).toFixed(2)} você está <b>APROVADO.`;
+
+                        resultados.appendChild(p);
+
+                    } else  if (numero >= 5){
+                        const p = document.createElement('p');
+                        p.innerHTML = `Sua nota foi ${Number(numero).toFixed(2)} você está <b>RECUPERAÇÃO</b>.`;
+
+                        resultados.appendChild(p);
+
+                    } else  {
+                        const p = document.createElement('p');
+                        p.innerHTML = `Sua nota foi ${Number(numero).toFixed(2)} você está <b>REPROVADO</b>.`;
+
+                        resultados.appendChild(p);
+                    }
+
+                    inputNumero.value = '';
+                    inputNumero.focus();
+
+                } else {
+                    alert("Por favor, preencha todos os campos.");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

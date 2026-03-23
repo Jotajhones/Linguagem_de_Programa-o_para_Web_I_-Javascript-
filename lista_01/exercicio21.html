@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 21</title>
+
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #053259;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .formNome {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 20%;
+            height: 75vh;
+            background-color: white;
+            border-bottom: 1px solid gray;
+            padding: 20px;
+        }
+
+        .formNome form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-block: 20px;
+        }
+
+
+        .formNome form label {
+            width: 95%;
+            text-align: left;
+        }
+
+        .formNome form input {
+            padding: 10px;
+            border: 1px solid gray;
+            border-radius: 3px;
+            width: 95%;
+        }
+
+        .formNome form input:focus {
+            border-color: #0F2ABF;
+            outline: none;
+        }
+
+        .formNome form button {
+            padding: 10px 20px;
+            background-color: #F2AE2E;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            width: 150px;
+            margin: 5px auto;
+        }
+
+        .formNome form button:hover {
+            background-color: #b98523;
+        }
+
+        .atendimento {
+            position: fixed;
+            top: 20px;
+            left: calc(20% + 20px);
+            width: calc(60% - 40px);
+            height: calc(75vh - 40px);
+            background-color: white;
+            box-shadow: 0px 0px 7px 5px #00000031;
+            padding: 20px;
+            border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: larger;
+        }
+
+        .senha {
+            text-align: center;
+            font-weight: bold;
+            font-size: larger;
+        }
+
+        .numeroSenha {
+            font-size: 1000%;
+        }
+
+        .filaSecundaria {
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            width: 20%;
+            height: 75vh;
+            background-color: white;
+            border-bottom: 1px solid gray;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .filaSecundaria h1 {
+            font-size: larger;
+        }
+
+        .UltimasSenhas p {
+            font-size: 500%;
+            font-weight: bold;
+        }
+
+        .tempo_medio {
+            font-size: 300%;
+        }
+
+        .filaPrincipal {
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+            height: 25vh;
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+
+        }
+
+        .filaCabecalho {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .filaCabecalho h1 {
+            font-size: larger;
+        }
+
+        .cardPessoas {
+            border: 1px solid #053259;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            font-weight: bold;
+            font-size: medium;
+            width: 200px;
+        }
+
+        .cardPessoas .cardNome {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.5;
+            max-height: 4.5em;
+        }
+
+        .cardPessoas .cardSenha {
+            font-size: 250%;
+        }
+
+        .filaDeCards {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="formNome">
+        <h1>Guichê: </h1>
+        <form class="form">
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" id="nome" placeholder="Insira o nome">
+            <button type="button" class="adicionar">Adicionar</button>
+            <button type="button" class="proximo">Proximo</button>
+        </form>
+
+    </div>
+
+    <main class="atendimento">
+
+        <h1>Atendimento</h1>
+
+        <div class="senha">
+            <p>SENHA:</p>
+            <p class="numeroSenha">---</p>
+        </div>
+    </main>
+
+    <div class="filaSecundaria">
+
+        <div class="UltimasSenhas">
+            <h1>Últimas senhas:</h1>
+            <p class="ultimoAtendimento">---</p>
+        </div>
+
+        <div>
+            <h1>Espera Média:</h1>
+            <p class="tempo_medio">--min--s</p>
+        </div>
+
+    </div>
+
+    <div class="filaPrincipal">
+        <div class="filaCabecalho">
+            <h1>Proximos:</h1>
+        </div>
+
+        <div class="filaDeCards">
+
+        </div>
+
+    </div>
+
+    <script>
+        const filaPrincipal = [];
+        const historico = [];
+
+
+        class Senha {
+            constructor(nome, senha) {
+                this.nome = nome;
+                this.senha = senha;
+                this.entrada = new Date();
+                this.saida = null;
+            }
+        }
+
+        function tempoDeEspera() {
+
+            if (historico.length === 0) return;
+
+
+            const tempoTotalMs = historico.reduce((total, senha) => {
+
+                return total + (senha.saida - senha.entrada);
+            }, 0);
+
+
+            const tempoMedioMs = tempoTotalMs / historico.length;
+
+
+            const minutos = Math.floor(tempoMedioMs / (1000 * 60));
+            const segundos = Math.floor((tempoMedioMs / 1000) % 60);
+
+
+            document.querySelector('.tempo_medio').innerHTML =
+                `${String(minutos).padStart(2, '0')}min ${String(segundos).padStart(2, '0')}s`;
+        }
+
+        function loadFilaPrincipal() {
+
+            const filaDeCards = document.querySelector('.filaDeCards');
+            filaDeCards.innerHTML = "";
+            filaPrincipal.forEach(senha => { createCard(filaDeCards, senha.nome, senha.senha) })
+        }
+
+        function createCard(divPai, nome, senha) {
+
+            const card = document.createElement('div');
+            card.classList.add('cardPessoas');
+
+            const cardNome = document.createElement('p');
+            cardNome.classList.add('cardNome');
+            cardNome.innerHTML = nome;
+
+            const cardSenha = document.createElement('p');
+            cardSenha.classList.add('cardSenha');
+            cardSenha.innerHTML = senha;
+
+            card.appendChild(cardNome);
+            card.appendChild(cardSenha);
+
+            divPai.appendChild(card);
+
+        }
+
+        function addSenha(nome) {
+            let proximoNumero = 1;
+
+            if (filaPrincipal.length > 0) {
+                let ultimoCadastro = filaPrincipal[filaPrincipal.length - 1];
+                proximoNumero = Number(ultimoCadastro.senha) + 1;
+            }
+
+            const numeroSenha = String(proximoNumero).padStart(3, '0');
+            const celula = new Senha(nome, numeroSenha);
+
+            filaPrincipal.push(celula);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const nome = document.querySelector('#nome');
+            nome.focus();
+
+            loadFilaPrincipal();
+
+            const atendimentos = [];
+
+            const adicionar = document.querySelector('.adicionar');
+            const proximo = document.querySelector('.proximo');
+
+            adicionar.addEventListener('click', (e) => {
+
+                e.preventDefault();
+
+                const nome = document.querySelector('#nome');
+
+                if (nome && nome !== "") {
+
+                    addSenha(nome.value);
+                    nome.value = "";
+                    nome.focus();
+
+                    loadFilaPrincipal()
+
+                } else {
+                    alert("Por favor, preencha corretamente")
+                }
+
+            });
+
+            proximo.addEventListener('click', (e) => {
+
+                e.preventDefault();
+
+                historico.push(filaPrincipal[0]);
+
+                const senhaGuiche = document.querySelector('.numeroSenha');
+                senhaGuiche.innerHTML = filaPrincipal[0].senha;
+
+                filaPrincipal[0].saida = new Date();
+
+                if (historico.length > 1) {
+                    ultimoAtendimento = document.querySelector('.ultimoAtendimento');
+
+                    tempoDeEspera()
+
+                    ultimoAtendimento.innerHTML = historico[historico.length - 2].senha;
+
+                }
+
+                filaPrincipal.shift();
+                loadFilaPrincipal();
+
+            });
+
+        });
+
+    </script>
+</body>
+
+</html>

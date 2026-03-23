@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 15</title>
+
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #2BD999;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        main {
+            margin: 50px auto;
+            background-color: white;
+            box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.3);
+            width: 450px;
+            padding: 20px;
+            border-radius: 3px;
+        }
+
+        main h1 {
+            margin-bottom: 20px;
+        }
+
+        main p {
+            margin-block: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+
+        }
+
+        form input:focus {
+            border-color: #4227F2;
+            outline: none;
+        }
+
+        form label {
+            margin-bottom: 5px;
+        }
+
+        form .button {
+            padding: 10px 20px;
+            background-color: #4951F2;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            width: 150px;
+            margin: 5px auto;
+        }
+
+        .button:hover {
+            background-color: #27368C;
+        }
+
+        strong,
+        b {
+            color: #27368C;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+
+        <h1>Exercicio 15</h1>
+
+        <form class="form">
+
+            <label for="titulo">Informe o titulo do livro:</label>
+            <input type="text" class="titulo" placeholder="Título">
+
+            <label for="autor">Informe o autor do livro:</label>
+            <input type="text" class="autor" placeholder="Autor">
+
+            <label for="genero">informe o genero do livro:</label>
+            <input type="text" class="genero" placeholder="Gênero">
+
+            <label for="ano">Informe o ano de lançamento do livro:</label>
+            <input type="number" class="ano" placeholder="Ano">
+
+            <button type="submit" class="button buttonAlterar">Finalizar</button>
+
+        </form>
+
+        <div class="resultados">
+
+        </div>
+
+    </main>
+
+    <script>
+
+        class livro {
+
+            constructor(titulo, autor, genero, ano) {
+                this.titulo = titulo;
+                this.autor = autor;
+                this.genero = genero;
+                this.ano = ano;
+            }
+
+            descricao() {
+                return `Este livro é o "${this.titulo}", escrito por ${this.autor}, do gênero ${this.genero} e lançado no ano ${this.ano}.`;
+            }
+
+            setTitulo(novoTitulo) {
+                this.titulo = novoTitulo;
+            }
+
+            setAutor(novoAutor) {
+                this.autor = novoAutor;
+            }
+
+            setGenero(novoGenero) {
+                this.genero = novoGenero;
+            }
+
+            setAno(novoAno) {
+                this.ano = novoAno;
+            }
+
+            setLivro({ novoTitulo, novoAutor, novoGenero, novoAno } = {}) {
+
+                if (novoTitulo !== undefined && novoTitulo !== null && novoTitulo !== "") {
+                    this.titulo = novoTitulo;
+                }
+                if (novoAutor !== undefined && novoAutor !== null && novoAutor !== "") {
+                    this.autor = novoAutor;
+                }
+                if (novoGenero !== undefined && novoGenero !== null && novoGenero !== "") {
+                    this.genero = novoGenero;
+                }
+                if (novoAno !== undefined && novoAno !== null && novoAno !== "") {
+                    this.ano = novoAno;
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const meuLivro = new livro('1984', 'George Orwell', 'Ficção Científica', 1948);
+
+            const autor = document.querySelector('.autor');
+            const titulo = document.querySelector('.titulo');
+            const genero = document.querySelector('.genero');
+            const ano = document.querySelector('.ano');
+
+            titulo.focus();
+
+            const resultado = document.querySelector('.resultados');
+            resultado.innerHTML = "";
+
+            for (let atributo in meuLivro) {
+                resultado.innerHTML += `<strong>${atributo}:</strong> ${meuLivro[atributo]}<br>`;
+            }
+
+            resultado.innerHTML += `<br><strong>Descrição:</strong> ${meuLivro.descricao()}`;
+
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                if (autor.value) {
+                    meuLivro.setAutor(autor.value);
+                }
+
+                if (titulo.value) {
+                    meuLivro.setTitulo(titulo.value);
+                }
+
+                if (genero.value) {
+                    meuLivro.setGenero(genero.value);
+                }
+
+                if (ano.value) {
+                    meuLivro.setAno(ano.value);
+                }
+
+                resultado.innerHTML = "";
+
+                for (let atributo in meuLivro) {
+                    resultado.innerHTML += `<strong>${atributo}:</strong> ${meuLivro[atributo]}<br>`;
+                }
+
+                resultado.innerHTML += `<br><strong>Descrição:</strong> ${meuLivro.descricao()}`;
+            })
+
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 14</title>
+
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #2BD999;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        main {
+            margin: 50px auto;
+            background-color: white;
+            box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.3);
+            width: 450px;
+            padding: 20px;
+            border-radius: 3px;
+        }
+
+        main h1 {
+            margin-bottom: 20px;
+        }
+
+        main p {
+            margin-block: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+
+        }
+
+        form input:focus {
+            border-color: #4227F2;
+            outline: none;
+        }
+
+        form label {
+            margin-bottom: 5px;
+        }
+
+        form .button {
+            padding: 10px 20px;
+            background-color: #4951F2;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            width: 150px;
+            margin: 20px auto;
+        }
+
+        .button:hover {
+            background-color: #27368C;
+        }
+
+        strong,
+        b {
+            color: #27368C;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+
+        <h1>Exercicio 14</h1>
+
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia architecto repellendus, voluptatibus vero
+            et cupiditate dicta vel adipisci sunt debitis nam eaque nisi explicabo? Nemo et nesciunt modi libero quam.
+        </p>
+    </main>
+
+    <script>
+
+        class carro {
+
+            constructor(marca, modelo, ano) {
+                this.marca = marca;
+                this.modelo = modelo;
+                this.ano = ano;
+            }
+
+            descricao() {
+                return `Este carro é um ${this.marca} ${this.modelo} do ano ${this.ano}.`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const meuCarro = new carro('Toyota', 'Corolla', 2020);
+
+            console.log(meuCarro.modelo);
+            console.log(meuCarro.ano);
+            console.log(meuCarro.marca);
+
+            console.log(meuCarro.descricao());
+
+            const paragrafo = document.querySelector('p');
+            paragrafo.innerHTML = "";
+
+            for (let atributo in meuCarro) {
+                paragrafo.innerHTML += `<strong>${atributo}:</strong> ${meuCarro[atributo]}<br>`;
+            }
+
+            paragrafo.innerHTML += `<br><strong>Descrição:</strong> ${meuCarro.descricao()}`;
+        });
+
+
+    </script>
+</body>
+
+</html>

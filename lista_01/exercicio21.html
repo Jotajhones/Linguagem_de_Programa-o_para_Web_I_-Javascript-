@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercicio 21</title>
-
     <style>
         * {
             padding: 0px;
@@ -37,7 +36,6 @@
             gap: 10px;
             margin-block: 20px;
         }
-
 
         .formNome form label {
             width: 95%;
@@ -141,7 +139,6 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: space-between;
-
         }
 
         .filaCabecalho {
@@ -196,50 +193,32 @@
             <button type="button" class="adicionar">Adicionar</button>
             <button type="button" class="proximo">Proximo</button>
         </form>
-
     </div>
-
     <main class="atendimento">
-
         <h1>Atendimento</h1>
-
         <div class="senha">
             <p>SENHA:</p>
             <p class="numeroSenha">---</p>
         </div>
     </main>
-
     <div class="filaSecundaria">
-
         <div class="UltimasSenhas">
             <h1>Últimas senhas:</h1>
             <p class="ultimoAtendimento">---</p>
         </div>
-
         <div>
             <h1>Espera Média:</h1>
             <p class="tempo_medio">--min--s</p>
         </div>
-
     </div>
-
     <div class="filaPrincipal">
         <div class="filaCabecalho">
             <h1>Proximos:</h1>
         </div>
-
-        <div class="filaDeCards">
-
-        </div>
-
+        <div class="filaDeCards"></div>
     </div>
-
     <script>
-        const filaPrincipal = [];
-        const historico = [];
-
-
-        class Senha {
+        class Usuario {
             constructor(nome, senha) {
                 this.nome = nome;
                 this.senha = senha;
@@ -248,129 +227,93 @@
             }
         }
 
-        function tempoDeEspera() {
-
-            if (historico.length === 0) return;
-
-
-            const tempoTotalMs = historico.reduce((total, senha) => {
-
-                return total + (senha.saida - senha.entrada);
-            }, 0);
-
-
-            const tempoMedioMs = tempoTotalMs / historico.length;
-
-
-            const minutos = Math.floor(tempoMedioMs / (1000 * 60));
-            const segundos = Math.floor((tempoMedioMs / 1000) % 60);
-
-
-            document.querySelector('.tempo_medio').innerHTML =
-                `${String(minutos).padStart(2, '0')}min ${String(segundos).padStart(2, '0')}s`;
-        }
-
-        function loadFilaPrincipal() {
-
-            const filaDeCards = document.querySelector('.filaDeCards');
-            filaDeCards.innerHTML = "";
-            filaPrincipal.forEach(senha => { createCard(filaDeCards, senha.nome, senha.senha) })
-        }
-
-        function createCard(divPai, nome, senha) {
-
-            const card = document.createElement('div');
-            card.classList.add('cardPessoas');
-
-            const cardNome = document.createElement('p');
-            cardNome.classList.add('cardNome');
-            cardNome.innerHTML = nome;
-
-            const cardSenha = document.createElement('p');
-            cardSenha.classList.add('cardSenha');
-            cardSenha.innerHTML = senha;
-
-            card.appendChild(cardNome);
-            card.appendChild(cardSenha);
-
-            divPai.appendChild(card);
-
-        }
-
-        function addSenha(nome) {
-            let proximoNumero = 1;
-
-            if (filaPrincipal.length > 0) {
-                let ultimoCadastro = filaPrincipal[filaPrincipal.length - 1];
-                proximoNumero = Number(ultimoCadastro.senha) + 1;
+        class FilaDeEspera {
+            constructor() {
+                this.fila = [];
+                this.historico = [];
+                this.ultimoNumero = 0;
             }
 
-            const numeroSenha = String(proximoNumero).padStart(3, '0');
-            const celula = new Senha(nome, numeroSenha);
+            adicionar(nome) {
+                this.ultimoNumero++;
+                const novaSenha = new Usuario(nome, this.ultimoNumero);
+                this.fila.push(novaSenha);
+                return novaSenha;
+            }
 
-            filaPrincipal.push(celula);
+            proximo() {
+                if (this.fila.length === 0) return null;
+                const usuarioAtendido = this.fila.shift();
+                usuarioAtendido.saida = new Date();
+                this.historico.push(usuarioAtendido);
+                return usuarioAtendido;
+            }
+
+            get tempoDeEspera() {
+                if (this.historico.length === 0) return "00min 00s";
+
+                const tempoTotalMs = this.historico.reduce((total, usuario) => {
+                    return total + (usuario.saida - usuario.entrada);
+                }, 0);
+
+                const tempoMedioMs = tempoTotalMs / this.historico.length;
+                const minutos = Math.floor(tempoMedioMs / (1000 * 60));
+                const segundos = Math.floor((tempoMedioMs / 1000) % 60);
+
+                return `${String(minutos).padStart(2, '0')}min ${String(segundos).padStart(2, '0')}s`;
+            }
         }
 
-
         document.addEventListener('DOMContentLoaded', () => {
+            const fila = new FilaDeEspera();
 
-            const nome = document.querySelector('#nome');
-            nome.focus();
+            const inputs = {
+                inputNome: document.querySelector('#nome'),
+                btnAdicionar: document.querySelector('.adicionar'),
+                btnProximo: document.querySelector('.proximo'),
+                displaySenha: document.querySelector('.numeroSenha'),
+                displayUltima: document.querySelector('.ultimoAtendimento'),
+                displayTempo: document.querySelector('.tempo_medio'),
+                containerFila: document.querySelector('.filaDeCards')
+            };
 
-            loadFilaPrincipal();
+            function createCard(nome, senha) {
+                const card = document.createElement('div');
+                card.classList.add('cardPessoas');
+                card.id = `card-senha-${senha}`;
 
-            const atendimentos = [];
+                card.innerHTML = `
+                <p class="cardNome">${nome}</p>
+                <p class="cardSenha">${senha}</p>
+            `;
+                inputs.containerFila.appendChild(card);
+            }
 
-            const adicionar = document.querySelector('.adicionar');
-            const proximo = document.querySelector('.proximo');
+            inputs.btnAdicionar.addEventListener('click', () => {
+                const nome = inputs.inputNome.value.trim();
+                if (nome) {
+                    const novaSenha = fila.adicionar(nome);
+                    createCard(novaSenha.nome, novaSenha.senha);
+                    inputs.inputNome.value = '';
+                }
+            });
 
-            adicionar.addEventListener('click', (e) => {
+            inputs.btnProximo.addEventListener('click', () => {
+                const atendido = fila.proximo();
 
-                e.preventDefault();
+                if (atendido) {
 
-                const nome = document.querySelector('#nome');
+                    inputs.displaySenha.innerHTML = atendido.senha;
+                    inputs.displayUltima.innerHTML = atendido.senha;
+                    inputs.displayTempo.innerHTML = fila.tempoDeEspera;
 
-                if (nome && nome !== "") {
-
-                    addSenha(nome.value);
-                    nome.value = "";
-                    nome.focus();
-
-                    loadFilaPrincipal()
-
+                    const cardParaRemover = document.getElementById(`card-senha-${atendido.senha}`);
+                    if (cardParaRemover) cardParaRemover.remove();
                 } else {
-                    alert("Por favor, preencha corretamente")
+                    inputs.displaySenha.innerHTML = '---';
                 }
-
             });
-
-            proximo.addEventListener('click', (e) => {
-
-                e.preventDefault();
-
-                historico.push(filaPrincipal[0]);
-
-                const senhaGuiche = document.querySelector('.numeroSenha');
-                senhaGuiche.innerHTML = filaPrincipal[0].senha;
-
-                filaPrincipal[0].saida = new Date();
-
-                if (historico.length > 1) {
-                    ultimoAtendimento = document.querySelector('.ultimoAtendimento');
-
-                    tempoDeEspera()
-
-                    ultimoAtendimento.innerHTML = historico[historico.length - 2].senha;
-
-                }
-
-                filaPrincipal.shift();
-                loadFilaPrincipal();
-
-            });
-
         });
-
     </script>
 </body>
 
